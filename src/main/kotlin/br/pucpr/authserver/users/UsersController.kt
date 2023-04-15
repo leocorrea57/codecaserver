@@ -1,0 +1,30 @@
+package br.pucpr.authserver.users
+
+import br.pucpr.authserver.users.requests.UserRequest
+import br.pucpr.authserver.users.responses.UserResponse
+import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/users")
+class UsersController(val service: UsersService) {
+
+    @GetMapping
+    fun listUsers() = service.findAll().map { it.toResponse() }
+
+    @PostMapping
+    fun createUser(@RequestBody @Validated req: UserRequest) =
+            service.save(User(email = req.email!!, password = req.password!!, name = req.name!!))
+                    .toResponse()
+                    .let { ResponseEntity.status(CREATED).body(it) }
+
+    @GetMapping("/{id}")
+    fun getUser(@PathVariable("id") id: Long) =
+            service.getById(id)
+                    ?.let { ResponseEntity.ok(it.toResponse()) }
+                    ?: ResponseEntity.notFound().build()
+
+    private fun User.toResponse() = UserResponse(id!!, name, email)
+}

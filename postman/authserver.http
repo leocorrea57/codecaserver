@@ -1,0 +1,15 @@
+### Listar usuários
+GET localhost:8080/api/users
+
+### Cadastra um usuário
+POST localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Vinicius Godoy",
+  "email": "vinigodoy@gmail.com",
+  "password": "password"
+}
+
+### Lista o usuário 2
+GET localhost:8080/api/users/10
