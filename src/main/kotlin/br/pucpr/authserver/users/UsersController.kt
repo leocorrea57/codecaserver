@@ -18,7 +18,7 @@ class UsersController(val service: UsersService) {
     @Transactional
     @PostMapping
     fun createUser(@RequestBody @Validated req: UserRequest) =
-            service.save(User(email = req.email!!, password = req.password!!, name = req.name!!))
+            service.save(req)
                     .toResponse()
                     .let { ResponseEntity.status(CREATED).body(it) }
 

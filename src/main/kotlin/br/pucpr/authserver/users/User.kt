@@ -17,5 +17,13 @@ open class User(
         var password: String,
 
         @Column(nullable = false)
-        var name: String = ""
+        var name: String = "",
+
+        @ManyToMany
+        @JoinTable(
+                name = "UserRole",
+                joinColumns = [JoinColumn(name = "idUser")],
+                inverseJoinColumns = [JoinColumn(name = "idRole")]
+        )
+        val roles: MutableSet<Role> = mutableSetOf()
 )
