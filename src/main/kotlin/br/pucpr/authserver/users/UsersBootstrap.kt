@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component
 
 @Component
 class UsersBootstrap(
-        val roleRepository: RoleRepository,
+        val rolesRepository: RolesRepository,
         val userRepository: UsersRepository
 ) : ApplicationListener<ContextRefreshedEvent> {
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         val adminRole = Role(name = "ADMIN")
-        if (roleRepository.count() == 0L) {
-            roleRepository.save(adminRole)
-            roleRepository.save(Role(name = "USER"))
+        if (rolesRepository.count() == 0L) {
+            rolesRepository.save(adminRole)
+            rolesRepository.save(Role(name = "USER"))
         }
         if (userRepository.count() == 0L) {
             val admin = User(

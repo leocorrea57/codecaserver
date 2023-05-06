@@ -5,14 +5,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class UsersService(val repository: UsersRepository,
-                   val roleRepository: RoleRepository) {
+                   val rolesRepository: RolesRepository) {
     fun save(req: UserRequest): User {
         val user = User(
                 email = req.email!!,
                 password = req.password!!,
                 name = req.name!!
         )
-        val userRole = roleRepository.findByName("USER")
+        val userRole = rolesRepository.findByName("USER")
                 ?: throw IllegalStateException("Role 'USER' not found!")
 
         user.roles.add(userRole)
