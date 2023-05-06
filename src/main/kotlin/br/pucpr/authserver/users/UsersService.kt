@@ -21,5 +21,7 @@ class UsersService(val repository: UsersRepository,
 
     fun getById(id: Long) = repository.findById(id)
 
-    fun findAll() = repository.findAll()
+    fun findAll(role: String?): List<User> =
+            if (role == null) repository.findAll()
+            else repository.findAllByRole(role)
 }
