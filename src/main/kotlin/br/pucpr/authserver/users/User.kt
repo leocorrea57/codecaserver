@@ -1,8 +1,21 @@
 package br.pucpr.authserver.users
 
-class User(
-    var id: Long? = null,
-    var email: String,
-    var password: String,
-    var name: String
+import jakarta.persistence.*
+import jakarta.validation.constraints.Email
+
+@Entity
+@Table(name = "TblUser")
+open class User(
+        @Id @GeneratedValue
+        var id: Long? = null,
+
+        @Email
+        @Column(unique = true, nullable = false)
+        var email: String,
+
+        @Column(length = 50)
+        var password: String,
+
+        @Column(nullable = false)
+        var name: String = ""
 )

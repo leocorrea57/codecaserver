@@ -2,6 +2,7 @@ package br.pucpr.authserver.users
 
 import br.pucpr.authserver.users.requests.UserRequest
 import br.pucpr.authserver.users.responses.UserResponse
+import jakarta.transaction.Transactional
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -14,6 +15,7 @@ class UsersController(val service: UsersService) {
     @GetMapping
     fun listUsers() = service.findAll().map { it.toResponse() }
 
+    @Transactional
     @PostMapping
     fun createUser(@RequestBody @Validated req: UserRequest) =
             service.save(User(email = req.email!!, password = req.password!!, name = req.name!!))
@@ -22,7 +24,7 @@ class UsersController(val service: UsersService) {
 
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) =
-            service.getById(id)
+            service.getById(id).orElse(null)
                     ?.let { ResponseEntity.ok(it.toResponse()) }
                     ?: ResponseEntity.notFound().build()
 
