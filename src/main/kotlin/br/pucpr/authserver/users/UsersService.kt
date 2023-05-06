@@ -1,6 +1,7 @@
 package br.pucpr.authserver.users
 
 import br.pucpr.authserver.users.requests.UserRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,6 +23,6 @@ class UsersService(val repository: UsersRepository,
     fun getById(id: Long) = repository.findById(id)
 
     fun findAll(role: String?): List<User> =
-            if (role == null) repository.findAll()
+            if (role == null) repository.findAll(Sort.by("name"))
             else repository.findAllByRole(role)
 }
