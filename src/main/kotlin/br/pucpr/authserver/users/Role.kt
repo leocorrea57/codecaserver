@@ -3,7 +3,7 @@ package br.pucpr.authserver.users
 import jakarta.persistence.*
 
 @Entity
-open class Role(
+class Role(
         @Id @GeneratedValue
         val id: Long? = null,
 

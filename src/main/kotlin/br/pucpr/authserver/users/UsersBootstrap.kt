@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class UsersBootstrap(
-        val rolesRepository: RolesRepository,
-        val userRepository: UsersRepository
+    val rolesRepository: RolesRepository,
+    val userRepository: UsersRepository
 ) : ApplicationListener<ContextRefreshedEvent> {
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         val adminRole = Role(name = "ADMIN")
@@ -17,9 +17,9 @@ class UsersBootstrap(
         }
         if (userRepository.count() == 0L) {
             val admin = User(
-                    email = "admin@authserver.com",
-                    password = "admin",
-                    name = "Auth Server Administrator",
+                email = "admin@authserver.com",
+                password = "admin",
+                name = "Auth Server Administrator",
             )
             admin.roles.add(adminRole)
             userRepository.save(admin)

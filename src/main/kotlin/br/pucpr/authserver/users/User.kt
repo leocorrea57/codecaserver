@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email
 
 @Entity
 @Table(name = "TblUser")
-open class User(
+class User(
         @Id @GeneratedValue
         var id: Long? = null,
 

@@ -14,30 +14,30 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/users")
 class UsersController(val service: UsersService) {
     @Operation(
-            summary = "Lista todos os usuários",
-            parameters = [
-                Parameter(
-                        name = "role",
-                        description = "Papel a ser usado no filtro (opcional)",
-                        example = "USER"
-                )]
+        summary = "Lista todos os usuários",
+        parameters = [
+            Parameter(
+                name = "role",
+                description = "Papel a ser usado no filtro (opcional)",
+                example = "USER"
+            )]
     )
     @GetMapping
     fun listUsers(@RequestParam("role") role: String?) =
-            service.findAll(role).map { it.toResponse() }
+        service.findAll(role).map { it.toResponse() }
 
     @Transactional
     @PostMapping
     fun createUser(@RequestBody @Validated req: UserRequest) =
-            service.save(req)
-                    .toResponse()
-                    .let { ResponseEntity.status(CREATED).body(it) }
+        service.save(req)
+            .toResponse()
+            .let { ResponseEntity.status(CREATED).body(it) }
 
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) =
-            service.getById(id).orElse(null)
-                    ?.let { ResponseEntity.ok(it.toResponse()) }
-                    ?: ResponseEntity.notFound().build()
+        service.getById(id).orElse(null)
+            ?.let { ResponseEntity.ok(it.toResponse()) }
+            ?: ResponseEntity.notFound().build()
 
     private fun User.toResponse() = UserResponse(id!!, name, email)
 }
