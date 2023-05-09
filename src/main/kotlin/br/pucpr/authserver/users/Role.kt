@@ -4,12 +4,12 @@ import jakarta.persistence.*
 
 @Entity
 class Role(
-        @Id @GeneratedValue
-        val id: Long? = null,
+    @Id @GeneratedValue
+    val id: Long? = null,
 
-        @Column(unique = true, nullable = false)
-        val name: String = "",
+    @Column(unique = true, nullable = false)
+    val name: String = "",
 
-        @ManyToMany(mappedBy = "roles")
-        val users: MutableSet<User> = mutableSetOf()
+    @ManyToMany(mappedBy = "roles")
+    val users: MutableSet<User> = mutableSetOf()
 )
