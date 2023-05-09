@@ -12,5 +12,4 @@ class Role(
 
         @ManyToMany(mappedBy = "roles")
         val users: MutableSet<User> = mutableSetOf()
-) {
-}
+)
