@@ -2,8 +2,14 @@ package br.pucpr.authserver.security
 
 import br.pucpr.authserver.users.User
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.jackson.io.JacksonSerializer
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -27,6 +33,27 @@ class Jwt {
                 .addClaims(mapOf(USER_FIELD to it))
                 .compact()
         }
+
+    fun extract(req: HttpServletRequest): Authentication? {
+        val header = req.getHeader(AUTHORIZATION)
+        if (header == null || !header.startsWith(PREFIX)) return null
+        val token = header.replace(PREFIX, "").trim()
+
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(SECRET.toByteArray())
+            .deserializeJsonWith(
+                JacksonDeserializer(
+                    mapOf(USER_FIELD to UserToken::class.java)
+                )
+            ).build()
+            .parseClaimsJws(token)
+            .body
+
+        if (claims.issuer != ISSUER) return null
+        val user = claims.get(USER_FIELD, UserToken::class.java)
+        val authorities = user.roles.map { SimpleGrantedAuthority("ROLE_$it") }
+        return UsernamePasswordAuthenticationToken.authenticated(user, user.id, authorities)
+    }
 
     companion object {
         private const val PREFIX = "Bearer"

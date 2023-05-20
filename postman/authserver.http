@@ -14,6 +14,10 @@ Content-Type: application/json
 ### Lista o usuário 2
 GET localhost:8080/api/users/2
 
+### Lista o próprio usuário
+GET localhost:8080/api/users/me
+Authorization: Bearer {{token}}
+
 ### Login
 POST localhost:8080/api/users/login
 Content-Type: application/json
@@ -22,3 +26,25 @@ Content-Type: application/json
   "email": "vinigodoy@gmail.com",
   "password": "password"
 }
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.user.id)
+%}
+
+### Login com admin
+POST localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@authserver.com",
+  "password": "admin"
+}
+> {%
+    client.global.set("token", response.body.token)
+    client.global.set("id", response.body.user.id)
+%}
+
+### Exclui o usuário
+DELETE localhost:8080/api/users/2
+Authorization: Bearer {{token}}
+

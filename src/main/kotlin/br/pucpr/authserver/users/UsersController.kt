@@ -4,11 +4,14 @@ import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.UserRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -34,6 +37,11 @@ class UsersController(val service: UsersService) {
             .toResponse()
             .let { ResponseEntity.status(CREATED).body(it) }
 
+    @GetMapping("/me")
+    @PreAuthorize("permitAll()")
+    @SecurityRequirement(name = "AuthServer")
+    fun getSelf(auth: Authentication) = getUser(auth.credentials as Long)
+
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) =
         service.getById(id).orElse(null)
@@ -46,6 +54,8 @@ class UsersController(val service: UsersService) {
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "AuthServer")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.delete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
