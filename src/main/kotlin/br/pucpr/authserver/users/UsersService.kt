@@ -1,7 +1,9 @@
 package br.pucpr.authserver.users
 
+import br.pucpr.authserver.security.Jwt
 import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.UserRequest
+import br.pucpr.authserver.users.responses.LoginResponse
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -9,7 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 class UsersService(
     val repository: UsersRepository,
-    val rolesRepository: RolesRepository
+    val rolesRepository: RolesRepository,
+    val jwt: Jwt
 ) {
     fun save(req: UserRequest): User {
         val user = User(
@@ -30,10 +33,13 @@ class UsersService(
         if (role == null) repository.findAll(Sort.by("name"))
         else repository.findAllByRole(role)
 
-    fun login(credentials: LoginRequest): User? {
+    fun login(credentials: LoginRequest): LoginResponse? {
         val user = repository.findByEmail(credentials.email!!) ?: return null
         if (user.password != credentials.password) return null
-        return user
+        return LoginResponse(
+            token = jwt.createToken(user),
+            user.toResponse()
+        )
     }
 
     fun delete(id: Long): Boolean {

@@ -1,5 +1,6 @@
 package br.pucpr.authserver.users
 
+import br.pucpr.authserver.users.responses.UserResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 
@@ -26,4 +27,6 @@ class User(
         inverseJoinColumns = [JoinColumn(name = "idRole")]
     )
     val roles: MutableSet<Role> = mutableSetOf()
-)
+) {
+    fun toResponse() = UserResponse(id!!, name, email)
+}

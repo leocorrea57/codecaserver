@@ -2,7 +2,6 @@ package br.pucpr.authserver.users
 
 import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.UserRequest
-import br.pucpr.authserver.users.responses.UserResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import jakarta.transaction.Transactional
@@ -43,13 +42,11 @@ class UsersController(val service: UsersService) {
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody credentials: LoginRequest) =
-        service.login(credentials)?.let { ResponseEntity.ok(it.toResponse()) }
+        service.login(credentials)?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> =
         if (service.delete(id)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
-
-    private fun User.toResponse() = UserResponse(id!!, name, email)
 }
