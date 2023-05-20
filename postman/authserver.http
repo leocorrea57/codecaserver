@@ -12,4 +12,13 @@ Content-Type: application/json
 }
 
 ### Lista o usuário 2
-GET localhost:8080/api/users/10
+GET localhost:8080/api/users/2
+
+### Login
+POST localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "email": "vinigodoy@gmail.com",
+  "password": "password"
+}

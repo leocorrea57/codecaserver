@@ -13,4 +13,6 @@ interface UsersRepository : JpaRepository<User, Long> {
                 " order by u.name"
     )
     fun findAllByRole(role: String): List<User>
+
+    fun findByEmail(email: String): User?
 }
