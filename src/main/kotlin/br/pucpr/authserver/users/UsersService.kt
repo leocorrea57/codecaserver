@@ -27,7 +27,7 @@ class UsersService(
         return repository.save(user)
     }
 
-    fun getById(id: Long) = repository.findById(id)
+    fun getById(id: Long) = repository.findByIdOrNull(id)
 
     fun findAll(role: String?): List<User> =
         if (role == null) repository.findAll(Sort.by("name"))

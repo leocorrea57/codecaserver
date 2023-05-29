@@ -28,7 +28,8 @@ class UsersController(val service: UsersService) {
     )
     @GetMapping
     fun listUsers(@RequestParam("role") role: String?) =
-        service.findAll(role).map { it.toResponse() }
+        service.findAll(role)
+            .map { it.toResponse() }
 
     @Transactional
     @PostMapping
@@ -44,13 +45,14 @@ class UsersController(val service: UsersService) {
 
     @GetMapping("/{id}")
     fun getUser(@PathVariable("id") id: Long) =
-        service.getById(id).orElse(null)
+        service.getById(id)
             ?.let { ResponseEntity.ok(it.toResponse()) }
             ?: ResponseEntity.notFound().build()
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody credentials: LoginRequest) =
-        service.login(credentials)?.let { ResponseEntity.ok(it) }
+        service.login(credentials)
+            ?.let { ResponseEntity.ok(it) }
             ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
 
     @DeleteMapping("/{id}")
