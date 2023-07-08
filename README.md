@@ -1,3 +1,2 @@
-Servidor de autenticação Kotlin + SpringBoot usado nas aulas de desenvolvimento Backend.
-
-PUCPR 2023
+# codecaserver
+Projeto utilizado na disciplina de Dev Backend para curso de pós graduação em aplicações móveis (PUCPR).
