@@ -1,3 +1,77 @@
+// -------------------------------------------------------------
+// Mecanicas e depois agendamentos
+
+
+### Listar Mecanicas
+GET localhost:8080/api/mecanicas
+
+### Cadastra mecanica
+POST localhost:8080/api/mecanicas
+Content-Type: application/json
+
+{
+  "name": "Oficina do Paulo",
+  "email": "autopaulo@gmail.com",
+  "description": "Oficina especializada em VW"
+}
+
+### Exclui mecanica
+DELETE localhost:8080/api/mecanicas/1
+
+### Edita Mecanica
+POST localhost:8080/api/mecanicas/update
+Content-Type: application/json
+
+{
+  "mecId": 1,
+  "name": "Auto peças Max",
+  "email": "automax@gmail.com",
+  "description" : "Oficina especializada em GM"
+}
+
+
+
+
+
+
+
+
+### Listar Agendamentos
+GET localhost:8080/api/agendamentos
+
+### Listar agendamentos nome mecanica
+GET localhost:8080/api/agendamentos?name=Oficina do Paulo
+
+
+### Cadastra Agendamentos
+POST localhost:8080/api/agendamentos
+Content-Type: application/json
+
+{
+  "date": "07/06/22 14:00",
+  "mecId" : 2
+}
+
+### Exclui agendamento
+DELETE localhost:8080/api/agendamentos/1
+
+
+### Edita agendamento
+POST localhost:8080/api/agendamentos/update
+Content-Type: application/json
+
+{
+  "ageId": 1,
+  "date": "07/05/22 09:00"
+}
+
+
+
+
+
+
+
+
 ### Listar usuários
 GET localhost:8080/api/users
 
